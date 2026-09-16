@@ -1,511 +1,563 @@
-export type NavLink = { label: string; href: string; tag?: string };
+export type CategoryId = "footwear" | "hearing" | "eyewear" | "headface" | "workwear" | "respiratory";
 
-export const navLinks: NavLink[] = [
-  { label: "Anatomy", href: "#anatomy", tag: "3D HUD" },
-  { label: "Role Matrix", href: "#matrix", tag: "Kits" },
-  { label: "Fleet ROI", href: "#roi", tag: "Calculator" },
+export type Category = { id: CategoryId; label: string; blurb: string };
+
+export const categories: Category[] = [
+  { id: "footwear", label: "Safety Footwear", blurb: "Profit range · ISO 20345:2011 · Sizes 2–15" },
+  { id: "hearing", label: "Hearing", blurb: "Honeywell Howard Leight · SNR 30–35" },
+  { id: "eyewear", label: "Eyewear", blurb: "Anti-scratch polycarbonate · Goggles & specs" },
+  { id: "headface", label: "Head & Face", blurb: "Hard hats, shields & welding helmets" },
+  { id: "workwear", label: "Protective Wear", blurb: "Hi-vis, overalls, aprons & welding leather" },
+  { id: "respiratory", label: "Respiratory", blurb: "Dust masks & half-mask respirators · on request" },
+];
+
+export const categoryImage: Record<CategoryId, string> = {
+  footwear: "/images/prod-feet.jpg",
+  hearing: "/images/prod-hands.jpg",
+  eyewear: "/images/prod-eye.jpg",
+  headface: "/images/prod-head.jpg",
+  workwear: "/images/prod-hivis.jpg",
+  respiratory: "/images/prod-respiratory.jpg",
+};
+
+export type Product = {
+  code: string;
+  name: string;
+  category: CategoryId;
+  desc: string;
+  specs: string[];
+  sizes: string;
+  standard: string;
+  tag?: string;
+};
+
+export const products: Product[] = [
+  { code: "JS03-B · HOBO-B", name: "Hobo-B Econo Safety Boot — Black", category: "footwear", desc: "Entry-level unisex black safety boot. Tough daily driver for crews.", specs: ["200J steel toe cap", "Wide fit", "Dual-density PU sole (black/grey)"], sizes: "3 – 15 (Unisex)", standard: "ISO 20345:2011", tag: "Best value" },
+  { code: "JS04 · GOLIATH", name: "Goliath Safety Boot — Stone", category: "footwear", desc: "Stone boot with sports mesh lining and ankle support.", specs: ["200J steel toe", "Ext. PU toe bump cap", "Heel + ankle support + insole"], sizes: "2 – 15 (Unisex)", standard: "ISO 20345:2011" },
+  { code: "JS06 / JS07", name: "Assassin (Brown) / Bagheera (Black) Chelsea", category: "footwear", desc: "Slip-on Chelsea with pull tabs. On and off in seconds.", specs: ["200J steel toe", "Slip + abrasion resistant", "Dual-density PU + toe bump"], sizes: "2 – 15 (Unisex)", standard: "ISO 20345:2011", tag: "Slip-on" },
+  { code: "JS05 · TARANTULA", name: "Tarantula Ankle Weatherboot — Tan / Black", category: "footwear", desc: "Ankle weatherboot for heat and harsh ground.", specs: ["200J steel toe", "Kevlar penetration midsole", "300°C heat resistant"], sizes: "3 – 13", standard: "ISO 20345:2011" },
+  { code: "NJS01 · PARSON", name: "Parson Black Safety Boot", category: "footwear", desc: "Classic black lace-up with D-ring lacing and antistatic.", specs: ["Steel toe + steel midsole", "Antistatic", "Dual-density sole"], sizes: "3 – 15 (Unisex)", standard: "ISO 20345:2011" },
+  { code: "MR01 · SHAMROCK", name: "Shamrock Metatarsal Boot — Male", category: "footwear", desc: "Metatarsal protection plus penetration resistance.", specs: ["Plastic metatarsal guard", "Steel midsole", "Dual-density PU / rubber"], sizes: "3 – 15 (Male)", standard: "ISO 20345:2011" },
+  { code: "JS02 · LYNX", name: "Lynx Black Safety Shoe", category: "footwear", desc: "Low-cut unisex shoe for warehouse crews.", specs: ["Wide comfort fit", "Antistatic", "Slip + abrasion resistant"], sizes: "2 – 15 (Unisex)", standard: "ISO 20345:2011" },
+  { code: "LS01 / LS02", name: "Scarlet Boot / Charlotte Shoe — Ladies", category: "footwear", desc: "Women's fit black boot and shoe.", specs: ["Kevlar midsole", "300°C heat resistant", "Dual-density PU sole"], sizes: "3 – 9 (Ladies)", standard: "ISO 20345:2011", tag: "Ladies fit" },
+
+  { code: "EP-DR090C", name: "Reusable Tri-Flange Earplug — Lime, Corded", category: "hearing", desc: "Dromex fluorescent green mushroom plug. Washable.", specs: ["Tri-flange corded", "High-visibility green", "Reusable"], sizes: "One size", standard: "SNR 30" },
+  { code: "303L · BILSOM", name: "Bilsom 303L Disposable Earplug", category: "hearing", desc: "Howard Leight by Honeywell single-use foam.", specs: ["Soft foam", "Single-use", "Uncorded"], sizes: "One size", standard: "SNR 33" },
+  { code: "304L · BILSOM", name: "Bilsom 304L Corded Earplug", category: "hearing", desc: "Corded disposable foam for high-movement work.", specs: ["Blue cord", "Disposable foam", "Easy checks"], sizes: "One size", standard: "SNR 33" },
+  { code: "LL-1 · LASER-LITE", name: "Laser-Lite LL-1 Uncorded", category: "hearing", desc: "High-visibility pink/yellow. Highest attenuation.", specs: ["Highly visible", "Self-adjusting foam", "Disposable"], sizes: "One size", standard: "SNR 35", tag: "Max SNR" },
+  { code: "LL-30 · LASER-LITE", name: "Laser-Lite LL-30 Corded", category: "hearing", desc: "Corded LL-1 for dusty work.", specs: ["Yellow cord", "Disposable foam", "High visibility"], sizes: "One size", standard: "SNR 35" },
+  { code: "SMARTFIT", name: "SmartFit Corded — Reusable", category: "hearing", desc: "Howard Leight reusable conforming fit.", specs: ["Reusable", "Washable", "Corded"], sizes: "One size", standard: "SNR 30" },
+
+  { code: "026 · EUROSPEC", name: "Eurospec Spectacle — Anti-Scratch + Anti-Fog", category: "eyewear", desc: "Vinyl-frame spectacle, Clear Anti-Fog available.", specs: ["Anti-scratch polycarbonate", "Clear / Grey / Green / Amber", "Vinyl frame"], sizes: "One size", standard: "Polycarbonate" },
+  { code: "DV-12 · SPORT", name: "Sport Spectacle — Hardcoated Mirror", category: "eyewear", desc: "Sport frame, mirror suits indoor / outdoor.", specs: ["Anti-Fog", "Clear / Grey / Green / Amber", "Mirror option"], sizes: "One size", standard: "Polycarbonate" },
+  { code: "WRAPAROUND", name: "Wraparound Spectacle", category: "eyewear", desc: "Wrap frame for side coverage.", specs: ["Clear / Amber / Green", "Side coverage", "Anti-scratch"], sizes: "One size", standard: "Polycarbonate" },
+  { code: "DV-11", name: "Direct Vent Goggle — Clear", category: "eyewear", desc: "Wide-vision with direct mesh vent.", specs: ["Wide vision", "Direct mesh vent", "Clear lens"], sizes: "One size", standard: "Direct vent" },
+  { code: "DV-21", name: "Indirect Vent Goggle — Clear", category: "eyewear", desc: "Sealed indirect vents for dust and splash.", specs: ["Indirect dual vents", "Wide vision", "Vinyl frame"], sizes: "One size", standard: "Indirect vent", tag: "Dust + splash" },
+
+  { code: "HARD HAT", name: "Hard Hat", category: "headface", desc: "Site-standard shell. Pairs with all shields and straps.", specs: ["Pairs with face shield", "2 or 4-point strap ready", "Colours on request"], sizes: "Adjustable", standard: "Head protection", tag: "Core" },
+  { code: "BROW GUARD", name: "Brow Guard", category: "headface", desc: "Blue carrier for faceshield lenses.", specs: ["Lightweight", "Faceshield carrier", "Hard-hat compatible"], sizes: "One size", standard: "Face carrier" },
+  { code: "1MM LENS", name: "Replacement Lens 1mm — Clear / Green", category: "headface", desc: "Spare 1mm lens. Keep crews going.", specs: ["Clear / Green", "1mm", "Quick swap"], sizes: "One size", standard: "Faceshield lens" },
+  { code: "CHIN STRAP", name: "Chin Strap — 2 or 4 Point", category: "headface", desc: "Keeps hats on in wind and at height.", specs: ["2 or 4 point", "Adjustable", "Chin cup"], sizes: "One size", standard: "Retention" },
+  { code: "FACE SHIELD", name: "Face Shield for Hard Hat", category: "headface", desc: "Clear shield for grinding and cutting.", specs: ["Clear visor", "Hard-hat mount", "Full coverage"], sizes: "One size", standard: "Face protection" },
+  { code: "FLIP-FRONT", name: "Flip-Front Welding Helmet", category: "headface", desc: "Flip-front with adjustable headgear.", specs: ["Adjustable headgear", "Flip front", "Spares available"], sizes: "Adjustable", standard: "Welding" },
+  { code: "WELD LENS", name: "Replacement Lens — Flip-Front, Clear", category: "headface", desc: "Clear spares for flip-front helmets.", specs: ["Clear", "Pack spares", "Quick fit"], sizes: "One size", standard: "Welding lens" },
+
+  { code: "SA16 · EN4", name: "Reflective Jacket with ID — Lime", category: "workwear", desc: "125gsm vest with ID pouch, 5cm tape, zip.", specs: ["ID pouch", "5cm tape", "Zip + piping"], sizes: "S – 3XL", standard: "EN4", tag: "Hi-vis" },
+  { code: "SA10 · EN4", name: "Reflective Jacket with ID — Mesh", category: "workwear", desc: "Solid mesh zip vest. Cooler for summer.", specs: ["Solid mesh", "ID pouch", "Lime / Orange"], sizes: "S – 3XL", standard: "EN4" },
+  { code: "BIB STD", name: "Reflective Bib — 32×56cm", category: "workwear", desc: "Maxi bib for visitors.", specs: ["Solid mesh", "Lime / Orange", "Pull-on"], sizes: "S – 3XL", standard: "Hi-vis bib" },
+  { code: "PW-DISPOA-M", name: "Disposable Overall — 50gsm", category: "workwear", desc: "Non-woven for shutdowns and visitors.", specs: ["50gsm polypropylene", "Elasticised", "Hooded option"], sizes: "M – 3XL", standard: "Disposable" },
+  { code: "WELDERS HOOD", name: "Welders Hood + Skull Caps", category: "workwear", desc: "Flame-site hoods in blue / orange.", specs: ["Welders hood", "Skull caps", "Blue / Orange"], sizes: "One size", standard: "Welding accessory" },
+  { code: "PW-APVCW450", name: "White PVC Apron — 110×70cm", category: "workwear", desc: "450gsm coated PVC for washdown.", specs: ["450gsm coated", "Eyelets + laces", "110×70cm"], sizes: "One size", standard: "Washdown" },
+  { code: "BLOOD+FAT", name: "Blood & Fat Resistant Apron", category: "workwear", desc: "Food-safe for abattoirs.", specs: ["Blood + fat resistant", "70×110", "Wipe-clean"], sizes: "One size", standard: "Food industry" },
+  { code: "JADA LEATHER", name: "Jada Welding — Spats / Jackets / Apron", category: "workwear", desc: "Leather welding protection. Custom sizes.", specs: ["Spats + jackets + aprons", "Custom sizes", "Buckles / straps"], sizes: "Various + custom", standard: "Welding leather" },
+  { code: "MORELLI 28–62", name: "Morelli Overalls — Jacket & Pants", category: "workwear", desc: "Triple-stitched conti set.", specs: ["Tripler stitch", "Jacket + pants", "Blue gear"], sizes: "28 – 62", standard: "Workwear", tag: "Heavy duty" },
+  { code: "PW-EKB,S / CLB", name: "Kidney + Lamp Belt + Consumables", category: "workwear", desc: "Support, lamp belts, mopcaps and covers.", specs: ["Kidney belt S–2XL", "Cap lamp belt", "Mopcaps + shoe covers"], sizes: "S – 2XL", standard: "Consumables" },
+
+  { code: "RESP-FFP2", name: "FFP2 Dust Mask — Disposable", category: "respiratory", desc: "Disposable particulate mask for dust and grinding. Confirm stock on quote.", specs: ["Disposable", "Nose clip + head straps", "Dust / particulate"], sizes: "One size", standard: "On request", tag: "On request" },
+  { code: "RESP-HALF", name: "Half-Mask Respirator — Twin Cartridge", category: "respiratory", desc: "Reusable half-mask with replaceable cartridges. Confirm stock on quote.", specs: ["Reusable body", "Twin cartridges", "Adjustable harness"], sizes: "One size", standard: "On request", tag: "On request" },
+];
+
+/* ---------------- PER-PRODUCT 3-LAYER INSPECTOR ---------------- */
+export type InspectHotspot = { x: number; y: number; title: string; detail: string };
+export type InspectLayer = {
+  id: string;
+  name: string;
+  tag: string;
+  blurb: string;
+  specs: { label: string; value: string }[];
+  hotspots: InspectHotspot[];
+};
+export type Inspectable = {
+  code: string;
+  name: string;
+  category: CategoryId;
+  image: string;
+  layers: InspectLayer[];
+};
+
+export const inspectables: Inspectable[] = [
+  {
+    code: "JS04 · GOLIATH",
+    name: "Goliath Safety Boot — Stone",
+    category: "footwear",
+    image: "/images/prod-feet.jpg",
+    layers: [
+      {
+        id: "outer", name: "01 // Outer", tag: "IMPACT ZONE",
+        blurb: "Stone leather upper with extended PU toe bump cap taking the first hit.",
+        specs: [{ label: "Toe Cap", value: "200J steel" }, { label: "Upper", value: "Stone leather" }, { label: "Bump Cap", value: "Extended PU" }, { label: "Fit", value: "Wide" }],
+        hotspots: [
+          { x: 24, y: 58, title: "200J Steel Toe Cap", detail: "Rated to 200 joules — the SA site standard for falling objects." },
+          { x: 46, y: 42, title: "Extended PU Bump Cap", detail: "Wraps over the toe to stop scuffing wearing through the leather." },
+          { x: 72, y: 34, title: "Ankle Support Collar", detail: "Padded collar with integrated heel + ankle support system." },
+        ],
+      },
+      {
+        id: "core", name: "02 // Core", tag: "COMFORT + SHIFT",
+        blurb: "Sports mesh lining and comfort insole — the reason crews actually keep them on.",
+        specs: [{ label: "Lining", value: "Sports mesh" }, { label: "Insole", value: "Comfort" }, { label: "Support", value: "Heel + ankle" }, { label: "Sizes", value: "2 – 15" }],
+        hotspots: [
+          { x: 55, y: 52, title: "Sports Mesh Lining", detail: "Breathes through a full shift — cuts heat build-up and sweat." },
+          { x: 40, y: 66, title: "Comfort Insole", detail: "Cushioned footbed for crews standing on concrete all day." },
+        ],
+      },
+      {
+        id: "ground", name: "03 // Ground", tag: "GRIP",
+        blurb: "Dual-density PU outsole — slip and abrasion resistant.",
+        specs: [{ label: "Sole", value: "Dual-density PU" }, { label: "Grip", value: "Slip resistant" }, { label: "Wear", value: "Abrasion resistant" }, { label: "Standard", value: "ISO 20345" }],
+        hotspots: [
+          { x: 50, y: 84, title: "Dual-Density PU Outsole", detail: "Soft comfort layer bonded to a hard-wearing tread layer." },
+          { x: 76, y: 78, title: "Heel Strike Zone", detail: "Reinforced heel for ladder rungs and uneven ground." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "JS05 · TARANTULA",
+    name: "Tarantula Ankle Weatherboot",
+    category: "footwear",
+    image: "/images/prod-feet.jpg",
+    layers: [
+      {
+        id: "outer", name: "01 // Outer", tag: "WEATHER + HEAT",
+        blurb: "Tan or black weatherboot built for hot surfaces and rough ground.",
+        specs: [{ label: "Toe Cap", value: "200J steel" }, { label: "Heat", value: "300°C rated" }, { label: "Build", value: "Ankle boot" }, { label: "Sizes", value: "3 – 13" }],
+        hotspots: [
+          { x: 24, y: 58, title: "200J Steel Toe", detail: "Full impact rating in a lighter ankle-height profile." },
+          { x: 70, y: 32, title: "Weatherproof Ankle", detail: "Higher cut keeps debris and water out on open ground." },
+        ],
+      },
+      {
+        id: "core", name: "02 // Core", tag: "PENETRATION",
+        blurb: "Kevlar midsole — the layer that stops nails and rebar.",
+        specs: [{ label: "Midsole", value: "Kevlar" }, { label: "Conductivity", value: "Non-conductive" }, { label: "Weight", value: "Lightweight" }, { label: "Sole", value: "Rubber / PU" }],
+        hotspots: [
+          { x: 48, y: 70, title: "Kevlar Penetration Midsole", detail: "Flexible anti-puncture layer — no steel plate stiffness." },
+          { x: 62, y: 62, title: "Non-Conductive Build", detail: "Safe around live electrical work where steel plates aren't." },
+        ],
+      },
+      {
+        id: "ground", name: "03 // Ground", tag: "300°C",
+        blurb: "Dual-density rubber/polyurethane sole rated to 300°C.",
+        specs: [{ label: "Sole", value: "Rubber / PU" }, { label: "Heat", value: "300°C contact" }, { label: "Grip", value: "Slip resistant" }, { label: "Wear", value: "Abrasion resistant" }],
+        hotspots: [
+          { x: 50, y: 85, title: "300°C Heat Resistant Sole", detail: "Walk hot surfaces, slag and fresh welds without sole melt." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "MR01 · SHAMROCK",
+    name: "Shamrock Metatarsal Boot",
+    category: "footwear",
+    image: "/images/prod-feet.jpg",
+    layers: [
+      {
+        id: "outer", name: "01 // Outer", tag: "METATARSAL",
+        blurb: "External metatarsal guard covering the bones a toe cap can't.",
+        specs: [{ label: "Guard", value: "Plastic metatarsal" }, { label: "Toe", value: "Steel cap" }, { label: "Fit", value: "Wide" }, { label: "Sizes", value: "3 – 15 (Male)" }],
+        hotspots: [
+          { x: 42, y: 40, title: "Metatarsal Protector", detail: "Shields the upper foot — critical where heavy items get dropped." },
+          { x: 24, y: 58, title: "Steel Toe Cap", detail: "Standard toe protection under the metatarsal shield." },
+        ],
+      },
+      {
+        id: "core", name: "02 // Core", tag: "MIDSOLE",
+        blurb: "Steel midsole offering penetration resistance underfoot.",
+        specs: [{ label: "Midsole", value: "Steel" }, { label: "Resistance", value: "Penetration" }, { label: "Lining", value: "Padded" }, { label: "Standard", value: "ISO 20345" }],
+        hotspots: [
+          { x: 48, y: 72, title: "Steel Penetration Midsole", detail: "Stops nails and sharp scrap on demolition and yard work." },
+        ],
+      },
+      {
+        id: "ground", name: "03 // Ground", tag: "DUAL DENSITY",
+        blurb: "Dual-density PU / rubber sole for grip and durability.",
+        specs: [{ label: "Sole", value: "PU / rubber" }, { label: "Grip", value: "Slip resistant" }, { label: "Wear", value: "Abrasion resistant" }, { label: "Build", value: "Dual density" }],
+        hotspots: [
+          { x: 50, y: 84, title: "PU / Rubber Outsole", detail: "Rubber contact layer for grip, PU midlayer for comfort." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "LS01 / LS02",
+    name: "Scarlet Boot / Charlotte Shoe — Ladies",
+    category: "footwear",
+    image: "/images/prod-feet.jpg",
+    layers: [
+      {
+        id: "outer", name: "01 // Outer", tag: "LADIES FIT",
+        blurb: "Proper women's last — not a shrunken men's boot.",
+        specs: [{ label: "Fit", value: "Ladies last" }, { label: "Sizes", value: "3 – 9" }, { label: "Options", value: "Boot or shoe" }, { label: "Colour", value: "Black / pink trim" }],
+        hotspots: [
+          { x: 30, y: 50, title: "Women's Specific Last", detail: "Narrower heel and correct instep — stops rubbing and blisters." },
+          { x: 68, y: 36, title: "Boot or Shoe Option", detail: "LS01 boot for site, LS02 shoe for plant and warehouse." },
+        ],
+      },
+      {
+        id: "core", name: "02 // Core", tag: "PENETRATION",
+        blurb: "Kevlar midsole in a lighter women's build.",
+        specs: [{ label: "Midsole", value: "Kevlar" }, { label: "Heat", value: "300°C" }, { label: "Conductivity", value: "Non-conductive" }, { label: "Weight", value: "Lightweight" }],
+        hotspots: [
+          { x: 48, y: 70, title: "Kevlar Midsole", detail: "Same penetration protection as the men's range." },
+        ],
+      },
+      {
+        id: "ground", name: "03 // Ground", tag: "GRIP",
+        blurb: "Dual-density polyurethane sole, slip and abrasion resistant.",
+        specs: [{ label: "Sole", value: "Dual-density PU" }, { label: "Grip", value: "Slip resistant" }, { label: "Heat", value: "300°C" }, { label: "Standard", value: "ISO 20345" }],
+        hotspots: [
+          { x: 50, y: 85, title: "Dual-Density PU Sole", detail: "Lightweight grip without adding fatigue over a shift." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "DV-21",
+    name: "Indirect Vent Goggle — Clear",
+    category: "eyewear",
+    image: "/images/prod-eye.jpg",
+    layers: [
+      {
+        id: "lens", name: "01 // Lens", tag: "OPTICS",
+        blurb: "Wide-vision clear polycarbonate for full peripheral sight.",
+        specs: [{ label: "Lens", value: "Polycarbonate" }, { label: "Vision", value: "Wide panoramic" }, { label: "Finish", value: "Anti-scratch" }, { label: "Tint", value: "Clear" }],
+        hotspots: [
+          { x: 50, y: 44, title: "Wide Vision Lens", detail: "Panoramic field so crews don't lift goggles to see sideways." },
+          { x: 30, y: 52, title: "Anti-Scratch Coating", detail: "Survives grinding sparks and pocket abuse far longer." },
+        ],
+      },
+      {
+        id: "frame", name: "02 // Frame", tag: "SEAL",
+        blurb: "Vinyl frame that conforms to the face and fits over specs.",
+        specs: [{ label: "Frame", value: "Soft vinyl" }, { label: "Fit", value: "Over-specs" }, { label: "Seal", value: "Full perimeter" }, { label: "Comfort", value: "Flexible" }],
+        hotspots: [
+          { x: 22, y: 62, title: "Conforming Vinyl Frame", detail: "Flexes to different face shapes for a genuine dust seal." },
+          { x: 78, y: 40, title: "Adjustable Headband", detail: "Elastic band adjusts over hard hats and beanies." },
+        ],
+      },
+      {
+        id: "vent", name: "03 // Vent", tag: "INDIRECT",
+        blurb: "Indirect dual vents — airflow in, splash and dust out.",
+        specs: [{ label: "Vent", value: "Indirect dual" }, { label: "Blocks", value: "Dust + splash" }, { label: "Airflow", value: "Baffled" }, { label: "Use", value: "Grinding / chemical" }],
+        hotspots: [
+          { x: 66, y: 66, title: "Indirect Dual Vents", detail: "Baffled path lets air through but blocks liquid splash and fine dust." },
+          { x: 36, y: 74, title: "Anti-Fog Airflow", detail: "Constant low airflow keeps the lens clear without direct exposure." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "026 · EUROSPEC",
+    name: "Eurospec Spectacle",
+    category: "eyewear",
+    image: "/images/prod-eye.jpg",
+    layers: [
+      {
+        id: "lens", name: "01 // Lens", tag: "ANTI-FOG",
+        blurb: "Anti-scratch polycarbonate in four tints including Clear Anti-Fog.",
+        specs: [{ label: "Lens", value: "Polycarbonate" }, { label: "Tints", value: "Clear/Grey/Green/Amber" }, { label: "Coating", value: "Anti-scratch" }, { label: "Option", value: "Anti-Fog" }],
+        hotspots: [
+          { x: 50, y: 44, title: "Four Tint Options", detail: "Clear indoors, grey outdoors, amber for low light, green for heat." },
+          { x: 28, y: 50, title: "Anti-Fog Version", detail: "Clear Anti-Fog spec for humid and cold-store environments." },
+        ],
+      },
+      {
+        id: "frame", name: "02 // Frame", tag: "VINYL",
+        blurb: "Lightweight vinyl frame for all-day wear.",
+        specs: [{ label: "Frame", value: "Vinyl" }, { label: "Weight", value: "Light" }, { label: "Fit", value: "Universal" }, { label: "Style", value: "Spectacle" }],
+        hotspots: [
+          { x: 74, y: 42, title: "Vinyl Temple Arms", detail: "Light enough that crews keep them on instead of pushing them up." },
+        ],
+      },
+      {
+        id: "use", name: "03 // Use", tag: "DAILY ISSUE",
+        blurb: "The everyday-issue spec — cheapest way to keep eye compliance at 100%.",
+        specs: [{ label: "Issue", value: "Daily / bulk" }, { label: "Sizes", value: "One size" }, { label: "Best for", value: "General site" }, { label: "Pairs with", value: "Hard hat" }],
+        hotspots: [
+          { x: 50, y: 70, title: "Bulk Issue Ready", detail: "Low enough cost to issue site-wide and to every visitor." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "HARD HAT",
+    name: "Hard Hat + Face Shield System",
+    category: "headface",
+    image: "/images/prod-head.jpg",
+    layers: [
+      {
+        id: "shell", name: "01 // Shell", tag: "IMPACT",
+        blurb: "Site-standard shell — the base of the whole head system.",
+        specs: [{ label: "Type", value: "Safety helmet" }, { label: "Colours", value: "On request" }, { label: "Fit", value: "Adjustable" }, { label: "Mounts", value: "Shield + strap" }],
+        hotspots: [
+          { x: 50, y: 26, title: "Impact Shell Crown", detail: "Takes the falling-object hit and spreads it across the harness." },
+          { x: 26, y: 46, title: "Accessory Brim", detail: "Mount point for the face shield carrier and brow guard." },
+        ],
+      },
+      {
+        id: "harness", name: "02 // Harness", tag: "RETENTION",
+        blurb: "Chin strap options that keep the hat on at height and in wind.",
+        specs: [{ label: "Strap", value: "2 or 4 point" }, { label: "Chin cup", value: "Included" }, { label: "Adjust", value: "Full range" }, { label: "Use", value: "Height / wind" }],
+        hotspots: [
+          { x: 34, y: 66, title: "2 or 4-Point Chin Strap", detail: "4-point for work at height, 2-point for general site wind." },
+          { x: 66, y: 60, title: "Adjustable Cradle", detail: "Sized to the individual so it sits level, not tilted back." },
+        ],
+      },
+      {
+        id: "face", name: "03 // Face", tag: "SHIELD",
+        blurb: "Clear face shield and 1mm replacement lenses for grinding and cutting.",
+        specs: [{ label: "Shield", value: "Clear visor" }, { label: "Lens", value: "1mm spare" }, { label: "Tints", value: "Clear / Green" }, { label: "Carrier", value: "Brow guard" }],
+        hotspots: [
+          { x: 50, y: 62, title: "Full Face Shield", detail: "Covers the whole face for grinding, cutting and chipping." },
+          { x: 72, y: 76, title: "1mm Replacement Lens", detail: "Swap the lens, keep the carrier — far cheaper than new shields." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "FLIP-FRONT",
+    name: "Flip-Front Welding Helmet",
+    category: "headface",
+    image: "/images/prod-head.jpg",
+    layers: [
+      {
+        id: "shell", name: "01 // Shell", tag: "WELDING",
+        blurb: "Flip-front welding shell for repeated strike-and-inspect cycles.",
+        specs: [{ label: "Type", value: "Flip front" }, { label: "Headgear", value: "Adjustable" }, { label: "Use", value: "Welding bay" }, { label: "Spares", value: "Available" }],
+        hotspots: [
+          { x: 50, y: 30, title: "Flip-Front Mechanism", detail: "Flip up to inspect the bead without removing the helmet." },
+          { x: 28, y: 52, title: "Adjustable Headgear", detail: "Ratchet sizing so it stays put through a flip cycle." },
+        ],
+      },
+      {
+        id: "lens", name: "02 // Lens", tag: "OPTICS",
+        blurb: "Replaceable clear lenses — consumables you keep on the shelf.",
+        specs: [{ label: "Lens", value: "Clear spare" }, { label: "Supply", value: "Pack" }, { label: "Fit", value: "Quick swap" }, { label: "Cost", value: "Consumable" }],
+        hotspots: [
+          { x: 52, y: 60, title: "Clear Replacement Lens", detail: "Spatter-pitted lens swaps out in seconds — helmet stays in service." },
+        ],
+      },
+      {
+        id: "support", name: "03 // Support", tag: "HOT WORK",
+        blurb: "Pairs with Jada leather and welders hoods for full hot-work cover.",
+        specs: [{ label: "Pairs with", value: "Jada leather" }, { label: "Hood", value: "Welders hood" }, { label: "Cap", value: "Skull cap" }, { label: "Boots", value: "Tarantula 300°C" }],
+        hotspots: [
+          { x: 40, y: 80, title: "Full Hot-Work Kit", detail: "Helmet + hood + leather apron + 300°C boots covers the whole bay." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "SA16 · EN4",
+    name: "Reflective Jacket with ID — Lime",
+    category: "workwear",
+    image: "/images/prod-hivis.jpg",
+    layers: [
+      {
+        id: "fabric", name: "01 // Fabric", tag: "VISIBILITY",
+        blurb: "125gsm lime fluorescent base — the colour the eye catches fastest.",
+        specs: [{ label: "Weight", value: "125 gsm" }, { label: "Colour", value: "Lime fluoro" }, { label: "Cut", value: "Sleeveless" }, { label: "Sizes", value: "S – 3XL" }],
+        hotspots: [
+          { x: 42, y: 34, title: "Fluorescent Lime Base", detail: "Peak daylight visibility — seen sooner by plant operators." },
+          { x: 64, y: 30, title: "Sleeveless Cut", detail: "Goes over overalls or a jacket without restricting arms." },
+        ],
+      },
+      {
+        id: "tape", name: "02 // Tape", tag: "NIGHT",
+        blurb: "5cm reflective tape returning headlight and torch light.",
+        specs: [{ label: "Tape", value: "5 cm" }, { label: "Return", value: "Retroreflective" }, { label: "Standard", value: "EN4" }, { label: "Layout", value: "Body bands" }],
+        hotspots: [
+          { x: 50, y: 56, title: "5cm Reflective Bands", detail: "Bounces vehicle headlights straight back — night shift critical." },
+          { x: 30, y: 62, title: "EN4 Conformity", detail: "Meets the EN4 warning-clothing spec for your safety file." },
+        ],
+      },
+      {
+        id: "features", name: "03 // Features", tag: "ID + ZIP",
+        blurb: "ID card pouch, zip front and black piping — site access built in.",
+        specs: [{ label: "ID", value: "Card pouch" }, { label: "Front", value: "Zip" }, { label: "Trim", value: "Black piping" }, { label: "Variant", value: "SA10 mesh" }],
+        hotspots: [
+          { x: 62, y: 46, title: "ID Card Pouch", detail: "Access cards stay visible at the gate — no more lanyard hunting." },
+          { x: 46, y: 70, title: "Zip Front + Piping", detail: "Zip closure and black piping resist the usual first-week damage." },
+        ],
+      },
+    ],
+  },
+  {
+    code: "RESP-HALF",
+    name: "Half-Mask Respirator — Twin Cartridge",
+    category: "respiratory",
+    image: "/images/prod-respiratory.jpg",
+    layers: [
+      {
+        id: "filter", name: "01 // Filter", tag: "CARTRIDGE",
+        blurb: "Twin replaceable cartridges sized to the hazard on site.",
+        specs: [{ label: "Cartridges", value: "Twin" }, { label: "Type", value: "Replaceable" }, { label: "Use", value: "Dust / vapour" }, { label: "Status", value: "On request" }],
+        hotspots: [
+          { x: 28, y: 56, title: "Twin Cartridge Mounts", detail: "Balanced breathing load and easy swap-out when spent." },
+          { x: 72, y: 56, title: "Hazard-Matched Filters", detail: "Tell us the hazard and we spec the correct cartridge grade." },
+        ],
+      },
+      {
+        id: "seal", name: "02 // Seal", tag: "FACE SEAL",
+        blurb: "Soft face seal — the part that decides whether it actually protects.",
+        specs: [{ label: "Seal", value: "Soft perimeter" }, { label: "Fit", value: "Adjustable" }, { label: "Valve", value: "Exhalation" }, { label: "Body", value: "Reusable" }],
+        hotspots: [
+          { x: 52, y: 62, title: "Face Seal Perimeter", detail: "A respirator only works if the seal is intact — fit check every shift." },
+          { x: 50, y: 78, title: "Exhalation Valve", detail: "Dumps warm breath so the mask stays comfortable and goggles stay clear." },
+        ],
+      },
+      {
+        id: "fit", name: "03 // Fit", tag: "HARNESS",
+        blurb: "Adjustable head harness that works under a hard hat.",
+        specs: [{ label: "Harness", value: "Adjustable" }, { label: "Under", value: "Hard hat OK" }, { label: "Alt", value: "FFP2 disposable" }, { label: "Status", value: "On request" }],
+        hotspots: [
+          { x: 70, y: 34, title: "Adjustable Head Harness", detail: "Tensions evenly so the seal holds with a hard hat fitted." },
+          { x: 34, y: 34, title: "Disposable Alternative", detail: "FFP2 dust mask available where a reusable body isn't needed." },
+        ],
+      },
+    ],
+  },
+];
+
+/* ---------------- HERO FULL KIT ---------------- */
+export const heroKitImage =
+  "https://images.pexels.com/photos/5493660/pexels-photo-5493660.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1400&w=900";
+
+export type KitPin = { x: number; y: number; code: string; label: string; tone: "volt" | "flare" | "ice" };
+
+export const heroKitPins: KitPin[] = [
+  { x: 50, y: 9, code: "HARD HAT", label: "Hard Hat + Chin Strap", tone: "volt" },
+  { x: 25, y: 20, code: "026", label: "Eurospec Anti-Fog Specs", tone: "ice" },
+  { x: 74, y: 22, code: "LL-30", label: "Laser-Lite Corded · SNR 35", tone: "ice" },
+  { x: 50, y: 30, code: "RESP-HALF", label: "Respirator Mask", tone: "flare" },
+  { x: 28, y: 48, code: "SA16", label: "Hi-Vis + ID Pouch · EN4", tone: "volt" },
+  { x: 72, y: 56, code: "MORELLI", label: "Morelli Overalls 28–62", tone: "volt" },
+  { x: 40, y: 72, code: "JADA", label: "Jada Welding Leather", tone: "flare" },
+  { x: 58, y: 90, code: "JS04", label: "Goliath Boot · 200J", tone: "volt" },
+];
+
+/* ---------------- SITE CHROME ---------------- */
+export const navLinks = [
+  { label: "Kits", href: "#kits" },
+  { label: "Inspector", href: "#inspector" },
   { label: "Products", href: "#products" },
-  { label: "Hub Dispatch", href: "#dispatch", tag: "48h SLA" },
-  { label: "Verify SANS", href: "#verify", tag: "Live" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Verify", href: "#verify" },
+  { label: "FAQ", href: "#faq" },
 ];
 
 export const clientLogos = [
-  { name: "AngloTrans Mining", sector: "Heavy Extraction" },
-  { name: "Sasol Integrated Energy", sector: "Petrochemical" },
-  { name: "Eskom Transmission Div", sector: "High Voltage" },
-  { name: "Transnet Port Terminals", sector: "Maritime Freight" },
-  { name: "WBHO Infrastructure", sector: "Structural Civil" },
-  { name: "Mondi Heavy Pulp", sector: "Industrial Processing" },
-  { name: "ArcelorMittal Steel", sector: "Smelting & Foundry" },
-  { name: "Glencore Chrome Ops", sector: "Sub-Surface Mining" },
+  { name: "WBHO Infrastructure", sector: "CIVIL" },
+  { name: "Transnet Port Terminals", sector: "FREIGHT" },
+  { name: "ArcelorMittal Steel", sector: "FOUNDRY" },
+  { name: "Mondi Heavy Pulp", sector: "PROCESSING" },
+  { name: "Glencore Chrome Ops", sector: "MINING" },
+  { name: "Sasol Energy", sector: "PETROCHEM" },
 ];
 
-// Exploded anatomy inspection layers
-export type AnatomyLayer = {
-  id: string;
-  name: string;
-  subtitle: string;
-  tag: string;
-  material: string;
-  specs: { label: string; value: string }[];
-  description: string;
-  standards: string[];
-  hotspots: { x: number; y: number; title: string; detail: string }[];
-};
-
-export const anatomyLayers: AnatomyLayer[] = [
-  {
-    id: "shell",
-    name: "01 // Carbon-Polymer Exoshell",
-    subtitle: "High-impact ballistic shell with thermal deflection coating",
-    tag: "IMPACT RESISTANCE",
-    material: "Nano-reinforced Carbon-Kevlar Composite",
-    specs: [
-      { label: "Impact Deflection", value: "14.8 kN peak" },
-      { label: "Thermal Tolerance", value: "-40°C to +150°C" },
-      { label: "Dielectric Rating", value: "20,000 V Proof" },
-      { label: "Total Mass", value: "385 grams" },
-    ],
-    description:
-      "Hydro-formed aerodynamic shell engineered to deflect kinetic debris at up to 120 m/s without puncturing or transferring rotational force to the cervical spine.",
-    standards: ["SANS 1372:2018", "EN 397 Class E", "ANSI Z89.1 Type II"],
-    hotspots: [
-      { x: 38, y: 28, title: "Kinetic Deflection Apex", detail: "Ridge angle sheds falling rocks up to 5kg at terminal velocity" },
-      { x: 62, y: 35, title: "Dielectric Crown", detail: "Zero-conductive polymer rated up to 20kV electrical flashover" },
-      { x: 25, y: 65, title: "Quick-Lock Brim Interface", detail: "Patented magnetic clip for earmuffs, face visors & headlamps" },
-    ],
-  },
-  {
-    id: "lattice",
-    name: "02 // 3D Elastomeric Damping Lattice",
-    subtitle: "Cellular energy absorption matrix replacing obsolete styrofoam",
-    tag: "G-FORCE CUSHION",
-    material: "DLS Photopolymer Voronoi Elastomer",
-    specs: [
-      { label: "Rotational Accel Drop", value: "-52% MIPS" },
-      { label: "Ventilation Airflow", value: "+340% CFM" },
-      { label: "Fatigue Resistance", value: "10,000 cycles" },
-      { label: "Weight", value: "115 grams" },
-    ],
-    description:
-      "Variable-density 3D printed lattice matrix. Deforms progressively under blunt acceleration to dissipate g-force before shock reaches the worker's skull.",
-    standards: ["ISO 12312-1", "EN 12492 Clause 4.2", "SANS 1397 Annex C"],
-    hotspots: [
-      { x: 50, y: 48, title: "Multi-Zone Voronoi Matrix", detail: "Densest at vertex point, progressive elasticity along temporal lobes" },
-      { x: 42, y: 72, title: "Continuous Micro-Channelling", detail: "Passive airflow keeps cranial core 3.4°C cooler in deep shaft mines" },
-    ],
-  },
-  {
-    id: "sensor",
-    name: "03 // Telemetry & Bio-Telemetry Core",
-    subtitle: "Autonomous environmental hazard & impact logging module",
-    tag: "IOT SAFETY NODE",
-    material: "IP68 Hermetic Sealed PEEK Housing",
-    specs: [
-      { label: "Gas Detection", value: "CO, H2S, CH4, O2" },
-      { label: "Impact Telemetry", value: "3-Axis 200g Gyro" },
-      { label: "Battery Endurance", value: "96 hours continuous" },
-      { label: "Mesh Protocol", value: "LoRaWAN + Sub-GHz" },
-    ],
-    description:
-      "Embedded telemetry module continuously monitors atmospheric gas spikes, heat exhaustion vitals, and logs un-reported micro-impacts to your OHS cloud dashboard.",
-    standards: ["SANS 10108 Hazardous Areas", "ATEX Zone 0 Ex ia", "IECEx Certified"],
-    hotspots: [
-      { x: 55, y: 55, title: "Sub-GHz LoRa Mesh Transceiver", detail: "Transmits through 80m of solid granite back to shaft head control" },
-      { x: 32, y: 42, title: "Optical Pulse & Fatigue Sensor", detail: "Monitors cranial skin temp and heat exhaustion onset in real time" },
-    ],
-  },
-  {
-    id: "visor",
-    name: "04 // Polarized Electro-Optic Visor",
-    subtitle: "High-velocity ballistic face guard with anti-fog iridium tint",
-    tag: "OPTICAL DEFENSE",
-    material: "Grade 1 Optical Polycarbonate + Sapphire Anti-Scratch",
-    specs: [
-      { label: "Impact Class", value: "High Energy (190 m/s)" },
-      { label: "UV Absorption", value: "99.9% UV400" },
-      { label: "Arc-Flash Rating", value: "12 cal/cm² ATPV" },
-      { label: "Anti-Fog Coating", value: "Permanent Hydrophilic" },
-    ],
-    description:
-      "Optically flawless visor with panoramic peripheral range. Integrated magnetic latch flips upward seamlessly with heavy gloved hands.",
-    standards: ["SANS 1386:2019", "EN 166 1B T K N", "NFPA 70E Arc Hazard"],
-    hotspots: [
-      { x: 48, y: 38, title: "Hydrophilic Molecular Anti-Fog", detail: "Guaranteed zero fogging in 99% RH underground humidity" },
-      { x: 68, y: 50, title: "Quick-Swap Neodymium Latches", detail: "Swap from clear to shade 5 cutting glass in under 3 seconds" },
-    ],
-  },
-];
-
-// Role-based PPE Matrix Bundles for Companies
 export type RoleBundle = {
   id: string;
   role: string;
   industry: string;
-  riskProfile: "EXTREME" | "HIGH" | "HAZARDOUS" | "HEAVY INDUSTRIAL";
-  recommendedWorkerRatio: string;
-  bundleWeight: string;
-  sansCertifications: string[];
-  unitCost: number;
-  items: {
-    category: string;
-    product: string;
-    spec: string;
-    compliance: string;
-  }[];
-  primaryHazards: string[];
+  risk: string;
+  blurb: string;
+  items: { code: string; name: string; note: string }[];
 };
 
 export const roleBundles: RoleBundle[] = [
   {
-    id: "deep-mining",
-    role: "Deep-Shaft Extraction & Rock Engineer",
-    industry: "Underground Mining & Gold/Platinum Reef",
-    riskProfile: "EXTREME",
-    recommendedWorkerRatio: "42% of mine roster",
-    bundleWeight: "4.8 kg total kit",
-    sansCertifications: ["SANS 1372", "SANS 12702", "SANS 2237", "SANS 10382", "EN 388:4544FP"],
-    unitCost: 2840,
+    id: "mining", role: "Mining & Heavy Ground Crew", industry: "Mining · Quarrying · Foundry", risk: "HIGH IMPACT",
+    blurb: "Metatarsal, heat and dust protection for harsh ground.",
     items: [
-      { category: "Head", product: "K30 Apex-Mining Caplamp Ready", spec: "Integrated bracket, battery harness, 14.8kN shell", compliance: "SANS 1372 Type 2" },
-      { category: "Body", product: "Graphene-Weave Flame & Acid Conti", spec: "Class 3 360° reflective, double gusset crotch", compliance: "SANS 12702 Class 3" },
-      { category: "Feet", product: "Ironstep Metatarsal Armor S3", spec: "Internal Poron XRD met-guard, nitrile slip sole", compliance: "SANS 2237 / EN ISO 20345" },
-      { category: "Hands", product: "ForgeCut Level-F Anti-Impact", spec: "Kevlar lining, high-vis TPR back-of-hand exos", compliance: "EN 388:2016 4X44FP" },
-      { category: "Respiratory", product: "AeroGuard P3 Dust & Radon Cartridge", spec: "Silicone face seal, speech diaphragm, twin P3", compliance: "SANS 10382 / EN 149" },
+      { code: "MR01", name: "Shamrock Metatarsal Boot", note: "Upper-foot guard + steel midsole" },
+      { code: "JS05", name: "Tarantula Weatherboot", note: "Kevlar + 300°C heat rated" },
+      { code: "DV-21", name: "Indirect Vent Goggle", note: "Dust + splash seal" },
+      { code: "LL-1", name: "Laser-Lite SNR 35", note: "Max attenuation" },
+      { code: "SA16", name: "Hi-Vis + ID Lime", note: "EN4 visibility" },
     ],
-    primaryHazards: ["Rockfall impact", "Crystalline silica dust", "Crush pinch-points", "Extreme heat index", "Low visibility shafts"],
   },
   {
-    id: "high-voltage",
-    role: "High-Voltage Substation & Arc-Flash Specialist",
-    industry: "Power Utilities & Renewable Grid Transmission",
-    riskProfile: "EXTREME",
-    recommendedWorkerRatio: "18% of electrical crew",
-    bundleWeight: "3.9 kg total kit",
-    sansCertifications: ["IEC 61482-2", "NFPA 70E", "SANS 1372 Class E", "EN 50365"],
-    unitCost: 3450,
+    id: "construction", role: "Construction & Civils Crew", industry: "Civils · Steel · Height", risk: "MIXED SITE",
+    blurb: "The everyday site kit — boots, hat, eyes, ears, hi-vis.",
     items: [
-      { category: "Head", product: "K30 ArcShield 40-Cal Helmet & Shroud", spec: "40 cal/cm² transparent nanofiber chin shield", compliance: "NFPA 70E / ASTM F2178" },
-      { category: "Body", product: "Nomex III-A 40 cal/cm² Switch Coat & Bib", spec: "Inherently flame-resistant multi-layer knit", compliance: "IEC 61482-2 APC 2" },
-      { category: "Hands", product: "Dielectric Class 4 Rubber + Leather Protector", spec: "Tested to 36,000V AC working voltage", compliance: "SANS 60903 / IEC 60903" },
-      { category: "Feet", product: "VoltStop 20kV Dielectric Composite Boot", spec: "Zero metal parts, ASTM F2413 EH rated outsole", compliance: "ASTM F2413 EH / SANS 2237" },
-      { category: "Eye", product: "Optix TrueColor Arc-Deflect Goggle", spec: "Distortion-free true color recognition", compliance: "EN 166 2C-1.2 1B 8" },
+      { code: "NJS01", name: "Parson Safety Boot", note: "Antistatic + steel midsole" },
+      { code: "HARD HAT", name: "Hard Hat + Chin Strap", note: "2 or 4-point retention" },
+      { code: "026", name: "Eurospec Spectacle", note: "Anti-scratch + Anti-Fog" },
+      { code: "304L", name: "Bilsom Corded SNR 33", note: "Stays on the worker" },
+      { code: "MORELLI", name: "Morelli Overalls 28–62", note: "Triple-stitched" },
     ],
-    primaryHazards: ["Arc-flash blast (up to 40 cal)", "Direct 33kV contact", "Molten metal spatter", "Concussive acoustic pulse"],
   },
   {
-    id: "petrochem",
-    role: "Petrochemical HAZMAT & Tank Entry Specialist",
-    industry: "Refineries, Chemical Processing & Gas Handling",
-    riskProfile: "HAZARDOUS",
-    recommendedWorkerRatio: "25% of refinery staff",
-    bundleWeight: "3.4 kg total kit",
-    sansCertifications: ["SANS 10382", "EN 14605 Type 3/4", "EN 1149-5 Anti-static", "EN 374-1"],
-    unitCost: 2980,
+    id: "welding", role: "Welding & Hot Work Bay", industry: "Welding · Cutting · Grinding", risk: "HEAT + SPARK",
+    blurb: "Leather, flip-front and heat-rated boots.",
     items: [
-      { category: "Respiratory", product: "AeroGuard Full-Face Multi-Gas APR", spec: "Organic vapour, acidic gas, ammonia filter", compliance: "SANS 10382 / EN 136 Class 3" },
-      { category: "Body", product: "ChemGuard Barrier Coverall Type 3-B", spec: "Liquid-tight heat-sealed seams, dissipative", compliance: "EN 14605 / SANS 1511" },
-      { category: "Hands", product: "SolventShield Extended Gauntlet", spec: "Butyl-nitrile laminate 0.7mm, textured palm", compliance: "EN ISO 374-1:2016 Type A" },
-      { category: "Feet", product: "AcidProof S5 Chemical Safety Wellingtons", spec: "Hydrocarbon & nitric acid resistant polyurethane", compliance: "EN ISO 20345 S5 SRC" },
-      { category: "Eye", product: "VapourSeal Pressure Equalized Goggle", spec: "Gas-tight closed foam perimeter, anti-scratch", compliance: "EN 166 3 4 5 BT" },
+      { code: "FLIP-FRONT", name: "Flip-Front Welding Helmet", note: "Adjustable headgear" },
+      { code: "JADA", name: "Jada Spats / Jacket / Apron", note: "Leather, custom sizes" },
+      { code: "JS05", name: "Tarantula Boot", note: "300°C + non-conductive" },
+      { code: "DV-11", name: "Direct Vent Goggle", note: "Grinding clear vision" },
+      { code: "HOOD", name: "Welders Hood + Skull Cap", note: "Spark coverage" },
     ],
-    primaryHazards: ["Benzene & hydrocarbon vapours", "Corrosive chemical splashes", "Static discharge in explosive zones", "Asphyxiation in confined spaces"],
   },
   {
-    id: "structural-civil",
-    role: "Structural Steel & High-Altitude Rigging Crew",
-    industry: "Mega Infrastructure & Civil Construction",
-    riskProfile: "HIGH",
-    recommendedWorkerRatio: "55% of construction workforce",
-    bundleWeight: "4.1 kg total kit",
-    sansCertifications: ["SANS 50361", "SANS 12702", "SANS 1372", "EN 388"],
-    unitCost: 2420,
+    id: "warehouse", role: "Warehouse, Food & Visitors", industry: "Logistics · Food · Facilities", risk: "LIGHT INDUSTRIAL",
+    blurb: "Light, compliant and easy to issue at scale.",
     items: [
-      { category: "Fall Arrest", product: "AeroHarness 5-Point Structural Fall Kit", spec: "Twin elasticated shock-absorbing lanyards, scaffold hooks", compliance: "SANS 50361 / EN 361" },
-      { category: "Head", product: "K30 Vertex Climber with 4-Point Y-Strap", spec: "Chin-strap retention >50daN for fall arrest", compliance: "EN 12492 / EN 397" },
-      { category: "Body", product: "Hi-Vis Heavy Ripstop 320gsm Boilersuit", spec: "Reinforced knee-pad inserts, tool holster loops", compliance: "SANS 12702 Class 2" },
-      { category: "Hands", product: "RiggerGrip Heavy Cable Handling Glove", spec: "Double cow-split leather with Kevlar thread", compliance: "EN 388:2016 3243X" },
-      { category: "Feet", product: "SteelClimb S3 High-Ankle Support Boot", spec: "Puncture plate, torsion control shank", compliance: "SANS 2237 / EN ISO 20345" },
+      { code: "JS02", name: "Lynx Safety Shoe", note: "Light + antistatic" },
+      { code: "JS06/07", name: "Chelsea Slip-On", note: "No laces, fast issue" },
+      { code: "SA10", name: "Mesh Hi-Vis + ID", note: "Cooler summer vest" },
+      { code: "BIB", name: "Reflective Bib", note: "Visitor compliance" },
+      { code: "DISPOA", name: "Disposable Overall", note: "Shutdowns + visitors" },
     ],
-    primaryHazards: ["High-altitude drops", "Swinging structural steel loads", "Rebar puncture injuries", "Blunt crane rigging impact"],
-  },
-  {
-    id: "fleet-logistics",
-    role: "Automated Logistics & Heavy Freight Operator",
-    industry: "Ports, Intermodal Rail & Distribution Centers",
-    riskProfile: "HEAVY INDUSTRIAL",
-    recommendedWorkerRatio: "70% of logistics hubs",
-    bundleWeight: "2.3 kg total kit",
-    sansCertifications: ["SANS 12702", "EN ISO 20345", "EN 388"],
-    unitCost: 1680,
-    items: [
-      { category: "Body", product: "Reflex-Max Breathable Hi-Vis Softshell", spec: "Day/night high-contrast chevrons, radio clip", compliance: "SANS 12702 Class 2" },
-      { category: "Feet", product: "AirStep Composite S1P Speed Lacer", spec: "Ultra-lightweight 420g, anti-fatigue PU insole", compliance: "EN ISO 20345 S1P SRC" },
-      { category: "Hands", product: "TouchFlex Nitrile Micro-Foam Touchscreen", spec: "Precision barcode scanner dexterity, 18-gauge", compliance: "EN 388:2016 4131A" },
-      { category: "Head", product: "BumpCap ErgoVent Polycarbonate Insert", spec: "Washable outer cap, 25mm EVA shock crown", compliance: "EN 812:2012" },
-      { category: "Eye", product: "Optix UltraClear Anti-Scratch Spectacle", spec: "Frameless aerodynamic temple grip, 22g", compliance: "SANS 1386 / EN 166" },
-    ],
-    primaryHazards: ["Heavy forklift collision", "Pallet crush hazards", "Driver repetitive fatigue", "Container terminal weather exposure"],
   },
 ];
 
-// Product Catalogue for Interactive Showcase
-export type CatalogItem = {
-  id: string;
-  name: string;
-  code: string;
-  category: "HEAD" | "EYE" | "BODY" | "HANDS" | "FEET" | "RESPIRATORY";
-  hazardFocus: string;
-  sansStandard: string;
-  unitPrice: number;
-  bulkDiscountPrice: number;
-  image: string;
-  specs: string[];
-  keyHighlight: string;
-};
-
-export const catalogItems: CatalogItem[] = [
-  {
-    id: "k30-apex-helmet",
-    name: "K30 Apex-400 Industrial Shell",
-    code: "SKU-H400-AMB",
-    category: "HEAD",
-    hazardFocus: "Blunt Impact & 20kV Dielectric",
-    sansStandard: "SANS 1372:2018",
-    unitPrice: 285,
-    bulkDiscountPrice: 228,
-    image: "/images/prod-head.jpg",
-    specs: ["14.8 kN impact tolerance", "4-point ratchet wheel harness", "Quick-mount earmuff slots", "Zero conductive rivets"],
-    keyHighlight: "Over 400,000 units deployed in South African platinum & diamond operations with 0 mechanical structural failures.",
+export const sansRecords: Record<string, { code: string; standard: string; lab: string; scope: string; hash: string; issued: string; renewal: string }> = {
+  FOOTWEAR: {
+    code: "ISO 20345:2011", standard: "Safety Footwear — 200J Steel Toe", lab: "Profit accredited testing",
+    scope: "Impact, compression, penetration, slip and abrasion across JS03 / JS04 / JS05 / JS06 / NJS01 / MR01 / JS02 / LS01",
+    hash: "0x8F3A29B1E408573D8C2B7E1A6F0945D2", issued: "2024-01-14", renewal: "2027-01-14",
   },
-  {
-    id: "k30-hivis-armour",
-    name: "Halo-470 Hi-Vis Modular Jacket",
-    code: "SKU-J470-VIS",
-    category: "BODY",
-    hazardFocus: "Low Visibility & Thermal Abrasion",
-    sansStandard: "SANS 12702:2018",
-    unitPrice: 420,
-    bulkDiscountPrice: 336,
-    image: "/images/prod-hivis.jpg",
-    specs: ["Class 3 360° silver reflective tape", "Waterproof 10,000mm hydrostatic head", "Reinforced Cordura elbows", "Dual gas-monitor shoulder tabs"],
-    keyHighlight: "Compliant with Department of Mineral Resources and Energy mandatory high-visibility underground visibility mandate.",
+  HEARING: {
+    code: "SNR 30–35", standard: "Hearing Protection — Honeywell Howard Leight", lab: "Honeywell laboratory attestation",
+    scope: "EP-DR090C SNR30 · Bilsom 303L/304L SNR33 · Laser-Lite LL-1/LL-30 SNR35 · SmartFit SNR30",
+    hash: "0x3D72B9A10F4C8E5192847B0E6A21359C", issued: "2023-11-02", renewal: "2026-11-02",
   },
-  {
-    id: "k30-optix-shield",
-    name: "Optix-VRX Ballistic Visor Goggle",
-    code: "SKU-G100-OPT",
-    category: "EYE",
-    hazardFocus: "High-Velocity Spatter & Dust",
-    sansStandard: "SANS 1386:2019",
-    unitPrice: 145,
-    bulkDiscountPrice: 116,
-    image: "/images/prod-eye.jpg",
-    specs: ["EN 166 Grade B (120 m/s impact)", "Hydrophobic molecular anti-fog", "UV400 spectral blocking", "OTG (over prescription glasses) fit"],
-    keyHighlight: "Permanent anti-fog molecular coating won't wash off under extreme humidity or pressure washing.",
-  },
-  {
-    id: "k30-aeroguard-p3",
-    name: "AeroGuard Twin-Cartridge Half-Mask",
-    code: "SKU-R300-RES",
-    category: "RESPIRATORY",
-    hazardFocus: "Silica, Asbestos & Toxic Vapour",
-    sansStandard: "SANS 10382:2012",
-    unitPrice: 235,
-    bulkDiscountPrice: 188,
-    image: "/images/prod-respiratory.jpg",
-    specs: ["Medical-grade hypoallergenic silicone", "Low breathing resistance exhalation valve", "Sweat-drainage chin channel", "99.95% particulate capture"],
-    keyHighlight: "Conforms to National Institute for Occupational Health silica dust exposure guidelines for quartz drilling.",
-  },
-  {
-    id: "k30-forgecut-glove",
-    name: "ForgeCut Level-F Graphene Glove",
-    code: "SKU-GL90-CUT",
-    category: "HANDS",
-    hazardFocus: "Razor Sheet Metal & Crushing",
-    sansStandard: "EN 388:2016 4X44FP",
-    unitPrice: 165,
-    bulkDiscountPrice: 132,
-    image: "/images/prod-hands.jpg",
-    specs: ["Graphene-engineered knit core", "Thermo-plastic rubber (TPR) back metacarpal shield", "Micro-cup sandy nitrile oil grip", "Touchscreen enabled fingertips"],
-    keyHighlight: "Stops 30 Newtons of blade shear pressure — 300% above conventional leather welding gloves.",
-  },
-  {
-    id: "k30-ironstep-boot",
-    name: "Ironstep S3 Composite Combat Boot",
-    code: "SKU-B800-MET",
-    category: "FEET",
-    hazardFocus: "Heavy Falling Objects & Sole Puncture",
-    sansStandard: "SANS 2237 / EN ISO 20345",
-    unitPrice: 1380,
-    bulkDiscountPrice: 1104,
-    image: "/images/prod-feet.jpg",
-    specs: ["200J non-magnetic composite toe", "Kevlar anti-perforation midsole (1100N)", "300°C HRO heat-resistant rubber sole", "Poron XRD flexible metatarsal guard"],
-    keyHighlight: "Airport & security scanner safe with composite architecture — saves 18 minutes per shift at security gates.",
-  },
-];
-
-// Cryptographic SANS Certificate Verification Data
-export type SansRecord = {
-  code: string;
-  standard: string;
-  accreditedLab: string;
-  issueDate: string;
-  renewalDate: string;
-  status: "VALID & VERIFIED" | "ACTIVE AUDIT";
-  hash: string;
-  scope: string;
-};
-
-export const sansRecords: Record<string, SansRecord> = {
-  "SANS-1372": {
-    code: "SANS-1372:2018",
-    standard: "Industrial Safety Helmets for Mining & Construction",
-    accreditedLab: "SABS Testing Laboratories (Pretoria)",
-    issueDate: "2024-01-14",
-    renewalDate: "2027-01-14",
-    status: "VALID & VERIFIED",
-    hash: "0x8F3A29B1E408573D8C2B7E1A6F0945D2",
-    scope: "Impact absorption, penetration resistance, 20kV electrical insulation, flame resistance",
-  },
-  "SANS-12702": {
-    code: "SANS-12702:2018",
-    standard: "High-Visibility Warning Clothing for Industrial & Highway",
-    accreditedLab: "National Metrology Institute of South Africa (NMISA)",
-    issueDate: "2023-11-02",
-    renewalDate: "2026-11-02",
-    status: "VALID & VERIFIED",
-    hash: "0x3D72B9A10F4C8E5192847B0E6A21359C",
-    scope: "Photometric retroreflective coefficient, chromaticity coordinates after 50 wash cycles",
-  },
-  "SANS-2237": {
-    code: "SANS 20345 / SANS 2237",
-    standard: "Personal Protective Equipment — Safety Footwear S3",
-    accreditedLab: "Footwear Testing Institute South Africa (Durban)",
-    issueDate: "2024-03-19",
-    renewalDate: "2027-03-19",
-    status: "VALID & VERIFIED",
-    hash: "0x5E1C82D7F49A03B56182903C4B8271AF",
-    scope: "Toe cap 200J energy impact, 15kN compression, nail puncture resistance, SRC slip test",
-  },
-  "SANS-10382": {
-    code: "SANS 10382:2012",
-    standard: "Respiratory Protective Devices — Half Masks & Particle Filters",
-    accreditedLab: "CSIR Materials Characterization Facility",
-    issueDate: "2023-08-11",
-    renewalDate: "2026-08-11",
-    status: "VALID & VERIFIED",
-    hash: "0x9182AB34CD56EF78091234567890ABCD",
-    scope: "Paraffin oil particulate penetration (<0.05%), inward leakage, CO2 build-up resistance",
-  },
-  "ISO-9001": {
-    code: "ISO 9001:2015",
-    standard: "Quality Management Systems for PPE Manufacturing & Dispatch",
-    accreditedLab: "TÜV Rheinland South Africa",
-    issueDate: "2024-06-01",
-    renewalDate: "2027-06-01",
-    status: "VALID & VERIFIED",
-    hash: "0xABCD1234EF567890A1B2C3D4E5F60718",
-    scope: "Batch traceability, automated warehouse dispatch SLA compliance, returns processing",
+  "HI-VIS": {
+    code: "EN4 · SA16 / SA10", standard: "High-Visibility Warning Clothing", lab: "EN4 conformity",
+    scope: "SA16 lime 125gsm + SA10 mesh with ID holder, 5cm tape. Bib STD 32×56cm.",
+    hash: "0x5E1C82D7F49A03B56182903C4B8271AF", issued: "2024-03-19", renewal: "2027-03-19",
   },
 };
 
-// Regional Dispatch Hub Telemetry
 export const dispatchHubs = [
-  {
-    hub: "Hub 01 // Gauteng Central",
-    location: "Johannesburg (Elandsfontein Logistic Corridor)",
-    coords: "26°12'S 28°02'E",
-    coverage: "Gauteng, Mpumalanga Coalfields, Limpopo Bushveld Complex",
-    inventoryUnits: "420,000 SKUs",
-    sla: "24h Metro / 48h Mines",
-    status: "NOMINAL // 100% DISPATCH RUNNING",
-    statusColor: "text-cyber-emerald",
-  },
-  {
-    hub: "Hub 02 // Port & Heavy Freight",
-    location: "Durban (Bayhead Logistics Port Zone)",
-    coords: "29°52'S 31°01'E",
-    coverage: "KwaZulu-Natal, Richards Bay Port, Free State Mining Basin",
-    inventoryUnits: "280,000 SKUs",
-    sla: "24h Port / 48h Provincial",
-    status: "NOMINAL // ZERO BOTTLENECK",
-    statusColor: "text-cyber-emerald",
-  },
-  {
-    hub: "Hub 03 // Maritime & Renewable Basin",
-    location: "Cape Town (Montague Gardens Tech Hub)",
-    coords: "33°51'S 18°30'E",
-    coverage: "Western Cape, Saldanha Deepwater, Northern Cape Solar/Wind",
-    inventoryUnits: "240,000 SKUs",
-    sla: "24h Metro / 48h Remote",
-    status: "NOMINAL // SOLAR DISPATCH ACTIVE",
-    statusColor: "text-cyber-emerald",
-  },
+  { hub: "Gauteng Central", location: "Johannesburg — Elandsfontein corridor", coverage: "Gauteng · Mpumalanga · Limpopo", stock: "Full Profit + Plan-It range", sla: "Confirm on quote" },
+  { hub: "KZN Port", location: "Durban — Bayhead logistics zone", coverage: "KZN · Free State", stock: "Core footwear + hi-vis", sla: "Confirm on quote" },
+  { hub: "Western Cape", location: "Cape Town — Montague Gardens", coverage: "Western + Northern Cape", stock: "Core + welding range", sla: "Confirm on quote" },
 ];
 
-// Pricing tiers
-export const enterpriseTiers = [
-  {
-    id: "tier-essentials",
-    name: "FLEET TACTICAL",
-    subtitle: "For operations with 50 – 250 active workers",
-    ratePerWorker: 185,
-    billedCycle: "per worker / month",
-    badge: "RAPID DEPLOY",
-    highlight: false,
-    sla: "48-Hour Hub Dispatch",
-    features: [
-      "Core 4-piece certified kit (Head, Hi-Vis, Gloves, Boots)",
-      "Automated digital sizing portal via worker mobile",
-      "Cryptographic batch certificates inside every carton",
-      "Instant damage replacement within 48 hours",
-      "Consolidated single monthly tax invoice",
-    ],
-    ctaText: "Configure Tactical Fleet",
-  },
-  {
-    id: "tier-continuous",
-    name: "CONTINUOUS COMPLIANCE // PRO",
-    subtitle: "Our flagship program for 250 – 1,500 active workforce",
-    ratePerWorker: 320,
-    billedCycle: "per worker / month",
-    badge: "MOST DEPLOYED BY HSE DIRECTORS",
-    highlight: true,
-    sla: "24-Hour Metro / 48-Hour Remote Guaranteed",
-    features: [
-      "Full 5-layer customized role-based PPE matrices",
-      "Quarterly auto-refills aligned with wear-out telemetry",
-      "Dedicated On-Site Safety Engineer for risk mapping",
-      "100% Department of Labour Inspection-Ready digital pack",
-      "Co-branded heat-press and embroidery with enterprise logo",
-      "Direct API sync into SAP, Oracle & NetSuite ERP",
-      "Zero dead stock: we take back unused sizes at zero penalty",
-    ],
-    ctaText: "Deploy Continuous Compliance",
-  },
-  {
-    id: "tier-defense",
-    name: "ENTERPRISE CONSIGNMENT // COMMAND",
-    subtitle: "For enterprise mining groups with 1,500+ workers across multiple sites",
-    ratePerWorker: null,
-    billedCycle: "Custom SLA & Consignment Credit",
-    badge: "ZERO STOCKOUT GUARANTEE",
-    highlight: false,
-    sla: "Same-Shift Instant Smart Lockers On Site",
-    features: [
-      "On-site intelligent automated PPE vending & consignment cage",
-      "Workers badge in with RFID to draw replacement gear instantly",
-      "Billed purely on consumption — zero capital tied up in inventory",
-      "Custom ballistic and chemical fabric development",
-      "60-day enterprise commercial credit terms",
-      "Executive quarterly risk & cost variance presentations to Board",
-      "24/7 dedicated critical incident emergency logistics line",
-    ],
-    ctaText: "Initiate Executive Briefing",
-  },
-];
-
-export const faqItems = [
-  {
-    q: "How does the K30 continuous subscription model prevent mine shutdowns under the Mine Health and Safety Act?",
-    a: "Under the MHSA and OHS Act 85 of 1993, any worker found on an active face without certified, intact PPE leads to an immediate Section 54 work-stoppage order, costing up to R2.5 million per shift. K30 guarantees 100% compliance through automated wear-out reorders, on-site contingency buffer stock, and digital inspection packs loaded with SANS test hashes before the inspector steps on site.",
-  },
-  {
-    q: "Can K30 co-brand high-visibility gear with our corporate colors and logos without voiding SANS 12702 certification?",
-    a: "Yes. SANS 12702 strictly dictates the minimum surface area of fluorescent background fabric and retroreflective tape. Applying badges in non-compliant zones invalidates certification. Our engineering team calculates exact photometric tolerances for embroidery and FR heat-seal logos so that every piece remains 100% certified under South African law.",
-  },
-  {
-    q: "How does the digital sizing scanner work across remote sites with limited connectivity?",
-    a: "Workers or shift supervisors scan an offline-capable QR code on their smartphone. A 60-second guided sizing survey captures footwear dimensions, chest, inseam, and head size. The telemetry syncs as soon as connection is detected, eliminating returns and ensuring every worker's personalized kit arrives pre-labeled with their name and clock number.",
-  },
-  {
-    q: "How do you integrate with our existing ERP (SAP, Sage, Oracle, NetSuite)?",
-    a: "We provide an enterprise REST API and EDI (Electronic Data Interchange) gateway. Your procurement team generates a single Blanket PO; our system transmits electronic delivery notes, batch certificate links, and itemized invoice line items directly into your accounts payable workflow without manual data capture.",
-  },
-  {
-    q: "What is your emergency dispatch protocol for sudden expansion or unplanned shut-downs?",
-    a: "With over 940,000 certified units held across our Johannesburg, Durban, and Cape Town regional hubs, we maintain dedicated disaster-reserve stock. In shutdown situations, our emergency freight partners deliver up to 500 complete kits anywhere in South Africa within 18 to 36 hours.",
-  },
+export const faqs = [
+  { q: "How do we order for a full crew with different sizes?", a: "Send your crew list with sizes. Footwear covers 2–15 (ladies 3–9), hi-vis S–3XL and overalls 28–62. We consolidate into one quote and one delivery." },
+  { q: "Are these certified for SA site compliance?", a: "Yes. Footwear is ISO 20345:2011 (200J steel toe), hearing is SNR 30–35 (Honeywell), hi-vis is EN4. Every delivery lists codes and standards for your safety file." },
+  { q: "Do you deliver to site and how fast?", a: "We dispatch nationally from Gauteng. Tell us your site date in the quote form and we'll confirm stock and lead time before you commit. Flag shutdowns as urgent." },
+  { q: "Can we get repeats and spares easily?", a: "Yes. Once sizes are on file, re-orders are one call or email. Lenses, chin straps, earplugs, mopcaps and shoe covers are stocked for top-ups." },
 ];
