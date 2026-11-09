@@ -13,6 +13,7 @@
     "canvas-confetti": "^1.9.4",
     "clsx": "2.1.1",
     "lucide-react": "^1.46.0",
+    "posthog-js": "^1.447.4",
     "react": "19.2.6",
     "react-dom": "19.2.6",
     "tailwind-merge": "3.4.0"
