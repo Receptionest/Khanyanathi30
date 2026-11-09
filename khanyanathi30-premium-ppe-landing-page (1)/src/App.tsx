@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode, type FormEvent } from "react";
 import confetti from "canvas-confetti";
 import { sound } from "./utils/audio";
+import posthog, { posthogLogger } from "./posthog";
 import {
   ShieldAlert, Volume2, VolumeX, Menu, X, ArrowRight, Check, Plus,
   Trash2, Send, CheckCircle2, Search, FileCheck2, Truck, MapPin,
@@ -83,27 +84,53 @@ export default function App() {
     setFlash((p) => [...p, id]);
     setTimeout(() => setFlash((p) => p.filter((x) => x !== id)), 2000);
   };
+  const openQuote = (entryPoint: string) => {
+    sound.playClick();
+    posthog.capture("quote_started", { entry_point: entryPoint, items_in_quote: cart.length });
+    posthogLogger.info("quote drawer opened", { entry_point: entryPoint, items_in_quote: cart.length });
+    setQuoteOpen(true);
+  };
   const addProduct = (p: Product) => {
+    const isNewItem = !cart.some((item) => item.id === p.code);
     sound.playSuccess();
-    setCart((prev) => (prev.some((i) => i.id === p.code) ? prev : [...prev, { id: p.code, name: p.name, code: p.code }]));
+    setCart((prev) => (prev.some((item) => item.id === p.code) ? prev : [...prev, { id: p.code, name: p.name, code: p.code }]));
+    if (isNewItem) {
+      posthog.capture("product_added_to_quote", { product_code: p.code, product_category: p.category });
+      posthogLogger.info("product added to quote list", { product_code: p.code, product_category: p.category });
+    }
     doFlash(p.code);
   };
   const addBundle = (b: RoleBundle) => {
     sound.playSuccess();
-    b.items.forEach((it) => setCart((prev) => (prev.some((i) => i.id === it.code) ? prev : [...prev, { id: it.code, name: it.name, code: it.code }])));
+    b.items.forEach((it) => setCart((prev) => (prev.some((item) => item.id === it.code) ? prev : [...prev, { id: it.code, name: it.name, code: it.code }])));
+    posthog.capture("crew_kit_added_to_quote", { bundle_id: b.id, bundle_item_count: b.items.length });
     doFlash(b.id);
-    setQuoteOpen(true);
+    openQuote("crew_kit");
   };
   const pickSans = (k: string) => {
-    sound.playClick(); setSansKey(k); setVerifying(true); sound.playScan();
+    sound.playClick();
+    posthog.capture("compliance_standard_selected", { standard_key: k });
+    setSansKey(k); setVerifying(true); sound.playScan();
     setTimeout(() => setVerifying(false), 420);
   };
   const pickInspect = (i: Inspectable) => {
-    sound.playScan(); setInsp(i); setLayerIdx(0); setSpotIdx(0);
+    sound.playScan();
+    posthog.capture("product_inspected", { product_code: i.code, product_category: i.category, inspection_type: "layered" });
+    setInsp(i); setLayerIdx(0); setSpotIdx(0);
   };
   const submitQuote = (e: FormEvent) => {
     e.preventDefault();
     sound.playSuccess();
+    posthog.capture("quote_submitted", {
+      items_in_quote: cart.length,
+      crew_size: quoteWorkers,
+      requested_category_count: wanted.length,
+    });
+    posthogLogger.info("quote request submitted", {
+      items_in_quote: cart.length,
+      crew_size: quoteWorkers,
+      requested_category_count: wanted.length,
+    });
     try { confetti({ particleCount: 110, spread: 75, origin: { y: 0.6 }, colors: ["#C7FF1A", "#FF5E1A", "#38D6FF", "#23D18B"] }); } catch { /* noop */ }
     setRefCode(`K30-RFQ-${Math.floor(1000 + Math.random() * 9000)}-ZA`);
     setSent(true);
@@ -152,12 +179,12 @@ export default function App() {
             ))}
           </nav>
           <div className="flex items-center gap-3">
-            <button onClick={() => { sound.playClick(); setQuoteOpen(true); }}
+            <button onClick={() => openQuote("header_list")}
               className="flex items-center gap-2 rounded border border-white/15 bg-void-850 px-3.5 py-2 font-mono text-xs font-semibold text-white hover:border-volt-400/60">
               <Layers className="h-4 w-4 text-volt-400" /><span className="hidden sm:inline">LIST</span>
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-volt-400 px-1 text-[10px] font-bold text-void-950">{cart.length}</span>
             </button>
-            <button onClick={() => { sound.playClick(); setQuoteOpen(true); }}
+            <button onClick={() => openQuote("header_quote")}
               className="btn-flare hidden items-center gap-2 rounded px-4 py-2 font-display text-xs font-bold uppercase sm:flex">
               Get quote <ArrowRight className="h-3.5 w-3.5" />
             </button>
@@ -171,7 +198,7 @@ export default function App() {
             {navLinks.map((l) => (
               <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)} className="block border-b border-white/5 py-2.5 font-display font-semibold text-white">{l.label}</a>
             ))}
-            <button onClick={() => { setMenuOpen(false); setQuoteOpen(true); }} className="btn-flare mt-4 w-full rounded py-3 font-display text-sm font-bold">GET QUOTE</button>
+            <button onClick={() => { setMenuOpen(false); openQuote("mobile_menu"); }} className="btn-flare mt-4 w-full rounded py-3 font-display text-sm font-bold">GET QUOTE</button>
           </div>
         )}
       </header>
@@ -202,7 +229,7 @@ export default function App() {
                 </p>
 
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <button onClick={() => { sound.playClick(); setQuoteOpen(true); }}
+                  <button onClick={() => openQuote("hero")}
                     className="btn-flare flex items-center gap-3 rounded px-7 py-4 font-display text-sm font-bold uppercase tracking-wider">
                     Get my crew quote <ArrowRight className="h-4 w-4" />
                   </button>
@@ -466,7 +493,7 @@ export default function App() {
                           <Crosshair className="h-4 w-4" />
                         </button>
                       )}
-                      <button onClick={() => { sound.playScan(); setInspected(p); }} className="grid h-[42px] w-[42px] place-items-center rounded border border-white/15 text-white hover:border-volt-400 hover:text-volt-400" title="Spec sheet">
+                      <button onClick={() => { sound.playScan(); posthog.capture("product_inspected", { product_code: p.code, product_category: p.category, inspection_type: "spec_sheet" }); setInspected(p); }} className="grid h-[42px] w-[42px] place-items-center rounded border border-white/15 text-white hover:border-volt-400 hover:text-volt-400" title="Spec sheet">
                         <Maximize2 className="h-4 w-4" />
                       </button>
                     </div>
@@ -589,16 +616,16 @@ export default function App() {
               <div className="rounded-lg border border-white/15 bg-void-900 p-6 sm:p-8">
                 <h3 className="font-display text-2xl font-bold text-white">Talk to a real person about sizes.</h3>
                 <div className="mt-5 space-y-3">
-                  <a href="tel:0118655422" className="flex items-center gap-3 rounded bg-white/5 p-4 hover:bg-white/10">
+                  <a href="tel:0118655422" onClick={() => posthog.capture("contact_method_selected", { method: "phone" })} className="flex items-center gap-3 rounded bg-white/5 p-4 hover:bg-white/10">
                     <Phone className="h-5 w-5 text-volt-400" />
                     <span><span className="block font-mono text-[11px] text-steel-400">PHONE</span><span className="font-semibold text-white">011 865 5422/3</span></span>
                   </a>
-                  <a href="mailto:sales4@planitsafety.co.za" className="flex items-center gap-3 rounded bg-white/5 p-4 hover:bg-white/10">
+                  <a href="mailto:sales4@planitsafety.co.za" onClick={() => posthog.capture("contact_method_selected", { method: "email" })} className="flex items-center gap-3 rounded bg-white/5 p-4 hover:bg-white/10">
                     <Mail className="h-5 w-5 text-volt-400" />
                     <span><span className="block font-mono text-[11px] text-steel-400">EMAIL</span><span className="font-semibold text-white">sales4@planitsafety.co.za</span></span>
                   </a>
                 </div>
-                <button onClick={() => { sound.playClick(); setQuoteOpen(true); }} className="btn-flare mt-5 flex w-full items-center justify-center gap-2 rounded py-3.5 font-display text-xs font-bold uppercase">
+                <button onClick={() => openQuote("contact_section")} className="btn-flare mt-5 flex w-full items-center justify-center gap-2 rounded py-3.5 font-display text-xs font-bold uppercase">
                   Start my quote <ArrowRight className="h-4 w-4" />
                 </button>
                 <p className="mt-3 text-center font-mono text-[11px] text-steel-500">T's & C's APPLY</p>
@@ -626,8 +653,8 @@ export default function App() {
             </div>
             <div className="space-y-2.5 lg:col-span-3">
               <span className="block font-bold tracking-wider text-volt-400">CONTACT:</span>
-              <a href="tel:0118655422" className="flex items-center gap-2 text-steel-300 hover:text-volt-400"><Phone className="h-4 w-4 text-volt-400" />011 865 5422/3</a>
-              <a href="mailto:sales4@planitsafety.co.za" className="flex items-center gap-2 text-steel-300 hover:text-volt-400"><Mail className="h-4 w-4 text-volt-400" />sales4@planitsafety.co.za</a>
+              <a href="tel:0118655422" onClick={() => posthog.capture("contact_method_selected", { method: "phone" })} className="flex items-center gap-2 text-steel-300 hover:text-volt-400"><Phone className="h-4 w-4 text-volt-400" />011 865 5422/3</a>
+              <a href="mailto:sales4@planitsafety.co.za" onClick={() => posthog.capture("contact_method_selected", { method: "email" })} className="flex items-center gap-2 text-steel-300 hover:text-volt-400"><Mail className="h-4 w-4 text-volt-400" />sales4@planitsafety.co.za</a>
             </div>
           </div>
           <div className="mt-6 flex flex-col items-center justify-between gap-3 text-[11px] text-steel-500 sm:flex-row">
@@ -645,7 +672,7 @@ export default function App() {
               {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
             </button>
             <span className="h-4 w-px bg-white/10" />
-            <button onClick={() => { sound.playClick(); setQuoteOpen(true); }} className="btn-flare flex items-center gap-2 rounded-full px-4 py-1.5 font-display text-xs font-bold">
+            <button onClick={() => openQuote("floating_dock")} className="btn-flare flex items-center gap-2 rounded-full px-4 py-1.5 font-display text-xs font-bold">
               <Layers className="h-3.5 w-3.5" /> GET QUOTE <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-void-950 px-1 font-mono text-[9px] text-volt-400">{cart.length}</span>
             </button>
           </div>
